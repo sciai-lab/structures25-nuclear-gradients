@@ -1,0 +1,7 @@
+# Very loose convergence settings; mostly for testing purposes.
+
+convergence_energy: 1.0e-4 # Eh
+convergence_grms: 3.0e-2 # Eh/Bohr
+convergence_gmax: 4.5e-2 # Eh/Bohr
+convergence_drms: 1.2e-1 # Angstrom
+convergence_dmax: 1.8e-1 # Angstrom

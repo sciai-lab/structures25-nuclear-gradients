@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+  - override /data: qmugs_bin0_qm9_perturbed_fock_tight
+  - override /model: graphformer_hierarc_energies_tf
+  - override /data/transforms: local_frames_global_natrep_cutoff_add_lframes_cl_node
+
+tags: ["qmugs_bin0_qm9_perturbed_fock_tight", "kin_plus_xc", "graphformer"]
+
+model:
+  net:
+    gnn_module:
+      n_layers: 8
+    energy_mlp:
+      n_mlps: 4
+
+    virtual_feature_adder:
+      _target_: mldft.ml.models.components.virtual_nodes.VirtualFeatureAdder
+      node_scale: 0.0
+      edge_attr_scale: 0.0

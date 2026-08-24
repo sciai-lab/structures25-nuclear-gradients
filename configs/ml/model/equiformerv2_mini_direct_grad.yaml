@@ -1,0 +1,16 @@
+defaults:
+  - equiformerv2_mini
+
+variational: false
+
+net:
+  variational: ${model.variational}
+  num_layers: 3 # one layer less to add one gradient layer
+  num_delta_layers: 0
+  num_grad_layers: 1
+
+  gradient_module:
+    _target_: mldft.ml.models.components.equiformerv2_components.initial_guess_delta_module.InitialGuessDelta
+    density_embedding_lmax_list: ${model.net.lmax_list}
+    n_channels: ${model.net.sphere_channels}
+    basis_info: ${data.basis_info}

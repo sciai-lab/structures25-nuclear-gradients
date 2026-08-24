@@ -1,0 +1,9 @@
+# @package hydra.launcher
+defaults:
+  - submit_slurm_helix
+
+# Override settings for debug/development partition
+timeout_min: 3
+partition: devel
+max_num_timeout: 10
+signal_delay_s: 30

@@ -1,0 +1,34 @@
+# @package _global_
+
+# Use this config to quickly generate a checkpoint after 1 short epoch of training.
+# (e.g. to verify that it is compatible with the denop inference script)
+
+defaults:
+  - default
+
+validate: False
+test: False
+
+callbacks:
+  model_checkpoint_last:
+    _target_: mldft.ml.callbacks.checkpoint.ModelCheckpointWithPermissions
+    dirpath: ${paths.output_dir}/checkpoints
+    filename: "last_epoch_{epoch:03d}"
+    monitor: "epoch"
+    mode: "max"
+    save_last: False
+    auto_insert_metric_name: False
+    verbose: False
+    save_top_k: 1
+    save_weights_only: False
+    every_n_train_steps: null
+    train_time_interval: null
+    every_n_epochs: null
+    save_on_train_epoch_end: null
+
+trainer:
+  max_epochs: 1
+  limit_train_batches: 1
+  limit_val_batches: 0
+  limit_test_batches: 0
+  enable_checkpointing: true

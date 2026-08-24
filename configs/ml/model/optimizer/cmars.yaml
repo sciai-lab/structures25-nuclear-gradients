@@ -1,0 +1,5 @@
+_target_: timm.optim.Mars
+_partial_: true
+lr: 1e-3
+weight_decay: 1e-10
+caution: True

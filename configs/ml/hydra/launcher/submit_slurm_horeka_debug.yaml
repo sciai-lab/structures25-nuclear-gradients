@@ -1,0 +1,9 @@
+# @package hydra.launcher
+defaults:
+  - submit_slurm_horeka
+
+# Override settings for debug/development partition
+timeout_min: 10
+partition: dev_accelerated
+max_num_timeout: 10
+signal_delay_s: 30

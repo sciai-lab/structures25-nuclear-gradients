@@ -1,0 +1,5 @@
+defaults:
+  - gradient_descent_torch_scheduler
+
+hard_projection: true
+eigenvalue_threshold: 0.001

@@ -1,0 +1,13 @@
+hydra:
+  run:
+    dir: "."
+  output_subdir: null
+
+activations_path: ${oc.env:DFT_DATA}/activations/QM9_Graphformer #path to a folder containing activation files for one scf iteration per molecule
+model_path: ${oc.env:DFT_MODELS}/train/runs/example/checkpoints/last.ckpt # used to generate the activations if they do not exist yet
+aggregation_mode: mean # mean, max, min, sum, maxmin
+k: 0.2 # fraction of data to use
+save_dir: ${oc.env:DFT_DATA}/split_files #directory to save the split file
+complete_path: ${oc.env:DFT_DATA}/QM9_perturbed_fock/split.pkl # path to the complete split file to draw from
+key: G3DLayer_3 # key in the activation dictionary G3DLayerTF_3 for Tensorframe
+precalc_distance_matrix: true # whether to precalculate the distance matrix (faster for small datasets, needs more memory)

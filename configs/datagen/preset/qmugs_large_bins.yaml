@@ -1,0 +1,6 @@
+# @package _global_
+defaults:
+  - override /dataset: qmugs_large_bins
+
+kohn_sham:
+  use_perturbation: false

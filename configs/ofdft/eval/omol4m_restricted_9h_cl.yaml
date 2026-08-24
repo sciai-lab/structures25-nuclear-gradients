@@ -1,0 +1,8 @@
+# @package _global_
+
+split_file_path: ${oc.env:DFT_DATA}/OMol4M_restricted_9h_cl/split.pkl
+split: "val"
+n_molecules: -1
+
+density_optimizer:
+  max_cycle: 1000

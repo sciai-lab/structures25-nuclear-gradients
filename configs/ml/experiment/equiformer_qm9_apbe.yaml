@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - override /data: qm9
+  - override /model: equiformerv2
+  - override /trainer: default
+  - override /data/transforms: no_basis_transforms
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["qm9", "apbe", "equiformerv2"]
+
+callbacks:
+  distance_embeddings:
+
+data:
+  target_key: "kin_minus_apbe"
+  datamodule:
+    batch_size: 2
+
+trainer:
+  max_epochs: 100
+
+model:
+  optimizer:
+    lr: 1e-3

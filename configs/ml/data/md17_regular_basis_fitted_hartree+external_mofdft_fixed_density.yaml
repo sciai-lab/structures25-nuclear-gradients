@@ -1,0 +1,7 @@
+# A dataset that uses an optimised basis set. Initial values from even tempered 2.5.
+# Fitted on even tempered 1.5 using L2- norm as loss
+# Date of fit:2024-05-16_14-55-41
+
+defaults:
+  - md17
+dataset_name: MD17_2024-05-16_14-55-41_hartree+external_mofdft_fixed_density

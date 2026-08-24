@@ -1,0 +1,83 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - data: qm9_perturbed_fock
+  - model: graphformer_tf
+  - density_optimizer: gradient_descent_torch
+  - denop_settings: default
+  - callbacks: default
+  - logger: tensorboard # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - trainer: default
+  - paths: default
+  - extras: default
+  - stage_data: default
+  - hydra: default
+  - _self_
+
+  # experiment configs allow for version control of specific hyperparameters
+  # e.g. best hyperparameters for given model and datamodule
+  - experiment: null
+
+  # config for hyperparameter optimization
+  - hparams_search: null
+
+  # optional local config for machine/user specific settings
+  # it's optional since it doesn't need to exist and is excluded from version control
+  - optional local: default
+
+  # debugging config (enable through command line, e.g. `python train.py debug=default)
+  - debug: null
+
+# task name, determines output directory path
+task_name: "train"
+
+# run name, determines suffix of output directory path
+name: ""
+
+# tags to help you identify your experiments
+# you can overwrite this in experiment configs
+# overwrite from command line with `python train.py tags="[first_tag, second_tag]"`
+tags: ["dev"]
+
+# set to True to validate the model before training (useful to verify checkpoint loading in
+# case of resuming training or fine-tuning)
+validate_before_train: False
+
+# set False to skip model training
+train: True
+
+# Validate once again after training
+validate: False
+
+# perform density optimization during training in the validation step
+denop_val: True
+
+# evaluate on test set, using best model weights achieved during training
+# lightning chooses best weights based on the metric specified in checkpoint callback
+test: False
+
+# Training mode - controls how training is initialized
+# Options: null, "resume", "override_settings", "load_weights", "finetune".
+# Check manage_training_modes.TrainingModes for the list.
+training_mode: null
+run_path: null # required when training_mode is set
+ckpt_choice: null # required for "load_weights" and "finetune"
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: null
+
+# Density Optimization settings
+density_optimizer:
+  max_cycle: 1000
+
+hydra:
+  searchpath:
+    - "pkg://configs/ofdft"
+  run:
+    dir: ${get_run_directory:${paths.log_dir},${task_name},${name},${hydra.job.override_dirname},${run_path},${training_mode}}
+
+  # hydra subdirectory usually named ".hydra". We name it differently for resumed training
+  # as to not overwrite the original ".hydra/config.yaml" from which we retrieve the settings
+  output_subdir: ${mux:${check_if_resuming:${training_mode}},.hydra_resumed,.hydra}

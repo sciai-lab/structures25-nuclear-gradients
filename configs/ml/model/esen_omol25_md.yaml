@@ -1,0 +1,10 @@
+defaults:
+  - esen
+
+net:
+  backbone:
+    # OMol25 medium backbone values, keeping local non-PBC / non-force defaults.
+    mmax: 2
+    max_neighbors: 30
+    num_distance_basis: 128
+    num_layers: 10

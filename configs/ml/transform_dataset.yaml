@@ -1,0 +1,31 @@
+# @package _global_
+
+defaults:
+  - data: qm9_perturbed_fock
+  - paths: default
+  - hydra: default
+  - _self_
+
+task_name: transform
+name: ""
+
+num_processes: ???
+num_threads_per_process: 1
+
+# Slice of source labels to enqueue for this run
+start_idx: 0
+num_molecules: null
+
+# Verify already transformed files and remove broken ones
+verify_files: true
+
+log_file: ${hydra:runtime.output_dir}/${task_name}.log
+log_level: INFO
+
+override_filequeue: false
+filequeue:
+  queue_dir: filequeue
+  lease_batch_size: 16
+  stale_after: 600
+  hb_interval: 120
+  recover_interval: 3600

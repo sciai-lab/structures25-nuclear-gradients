@@ -1,0 +1,13 @@
+_target_: mldft.utils.lr_scheduling.chain_schedulers
+_partial_: true
+schedulers:
+  - _target_: torch.optim.lr_scheduler.LinearLR
+    _partial_: true
+    start_factor: 0.0001
+    end_factor: 1
+    total_iters: 10 # 10 epochs ~ 3000 * 10 steps
+  - _target_: torch.optim.lr_scheduler.LinearLR
+    _partial_: true
+    start_factor: 1
+    end_factor: 0.0001
+    total_iters: ${trainer.max_epochs}

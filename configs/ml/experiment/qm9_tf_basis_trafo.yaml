@@ -1,0 +1,13 @@
+# @package _global_
+
+# the "basis trafo" in the name refers to the fact that the data module uses a basis transformation on the fly to compute local frames that fit even if chosen randomly for small molecules
+
+defaults:
+  - str25/default
+  - override /model: graphformer_tf
+  - override /data/transforms: dynamic_local_frames_global_natrep
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["qm9_perturbed_fock", "kin_plus_xc", "graphformer"]

@@ -1,0 +1,52 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - denop_settings: default
+  - density_optimizer: gradient_descent_torch_scheduler
+  - geometric_config: loose
+  - extras: default
+  - hydra: default
+  - eval: null
+
+# functional & init
+run_path: null # Needs to be set via command line
+ckpt_choice: "last"
+
+continue_denop: False # if continue_denop, write to denop_dir
+denop_dir: null
+
+# data
+data_path: null
+n_molecules: 1
+molecule_ids: [] # if non-empty, only these filename-stem molecule IDs are optimized
+start_idx: 0 # first molecule index to optimize
+
+# geometry optimization
+gradients: "analytic"
+nuclear_gradient_device: "auto"
+maxsteps: 50
+initial_guess_from_last: simple # can be null (None), simple, safe
+compute_geometry_energy_offset: False # run extra ML single-point on KS minimum and store E(A)-E(B)
+
+# process & plot settings
+device: cuda
+transform_device: cpu
+model_dtype: torch.float64
+deterministic: True
+num_devices: 1
+num_threads_per_process: 8
+geometric_loglevel: 30 # 10: DEBUG, 20: INFO, 30: WARNING, 40: ERROR, 50: CRITICAL
+# fail_fast: False
+# compute_final_hessian: False
+
+# hydra
+task_name: geomopt
+base_dir: ${oc.env:DFT_MODELS}/${task_name}/${path_to_basename:${run_path}}
+log_file: ${hydra:runtime.output_dir}/${task_name}.log
+config_file: ${hydra:runtime.output_dir}/config.yaml
+
+# logging
+disable_pbar: True
+main_log_level: 20
+molecule_log_level: 10

@@ -1,0 +1,25 @@
+# Includes only plots that can be evaluated fast and require no grid or hessian
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_all_energy_differences
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_density_and_gradient
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_grad_projection_metrics
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_coefficient_differences_lines
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_dipole_moment
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_coeffs_over_eigenvalues
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_coeffs_diff_over_eigenvalues
+  _partial_: True
+
+# - _target_: mldft.utils.plotting.plot_density_optimization._add_coeffs_over_eigenvalues_2d
+#   _partial_: True

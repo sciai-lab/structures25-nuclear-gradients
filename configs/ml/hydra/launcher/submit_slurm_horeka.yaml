@@ -1,0 +1,33 @@
+# @package hydra.launcher
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+
+# BaseConf
+timeout_min: 2880
+nodes: 1
+tasks_per_node: 1
+cpus_per_task: ${data.datamodule.num_workers}
+gpus_per_node: 1
+mem_gb: 20
+job_name: ${name}
+stderr_to_stdout: true
+
+# SlurmConf
+# Override partition/account from CLI if your project requires specific values.
+partition: accelerated
+max_num_timeout: 10
+signal_delay_s: 180
+
+setup:
+  - "source ~/.bashrc"
+  - "module purge"
+  - "export CUDA_VISIBLE_DEVICES=$SLURM_LOCALID"
+  - "export HYDRA_FULL_ERROR=1"
+
+additional_parameters:
+  open-mode: "append"
+  # Keep full environment propagation so SUBMITIT_EXECUTOR reaches the srun-launched task.
+  # Without ALL, Submitit can fail to detect the Slurm environment on some clusters.
+  export: "ALL,DFT_DATA,DFT_MODELS,MLDFT_RUN_COUNTER"
+  gres: "gpu:1"
+
+submitit_folder: "${hydra.sweep.dir}/%j_submitit_logs"

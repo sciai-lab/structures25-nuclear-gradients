@@ -1,0 +1,8 @@
+# gaussian very tight settings
+# energy convergence is not affected but gradient and displacement are reduced
+# by two to three orders of magnitude compared to the gaussian default
+convergence_energy: 1.0e-6 # Eh
+convergence_grms: 1.0e-6 # Eh/Bohr
+convergence_gmax: 2.0e-6 # Eh/Bohr
+convergence_drms: 4.0e-6 # Angstrom
+convergence_dmax: 6.0e-6 # Angstrom

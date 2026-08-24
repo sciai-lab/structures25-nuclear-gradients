@@ -1,0 +1,9 @@
+# @package _global_
+
+defaults:
+  - nuclear_gradient
+
+data:
+  datamodule:
+    dataset_kwargs:
+      nuclear_gradient_outlier_threshold: 1

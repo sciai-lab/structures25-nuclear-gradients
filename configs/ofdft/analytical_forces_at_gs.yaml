@@ -1,0 +1,43 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - denop_settings: default
+  - density_optimizer: gradient_descent_torch_scheduler
+  - extras: default
+  - hydra: default
+  - eval: null
+
+run_path: null
+ckpt_choice: "last"
+guess_path: null
+guess_ckpt_choice: "last"
+
+split: val
+split_file_path: ${oc.env:DFT_DATA}/QM9_perturbed_fock/split_dimenet.pkl
+n_molecules: 1
+molecule_choice: "seeded_random"
+molecule_ids: []
+seed: 0
+
+device: cuda
+batch_size: 1
+batch_timeout: 0.05
+model_dtype: torch.float64
+deterministic: true
+torch_threads_per_worker: 1
+
+nuclear_gradients_dirname: nuclear_gradients
+reference_total_key: nuc_grad_tot
+reference_model_key: auto
+gradient_method: analytic
+report_forces: true
+fail_fast: false
+
+continue_denop: false
+denop_dir: null
+
+task_name: analytical_forces_from_ofdft
+base_dir: ${oc.env:DFT_MODELS}/${task_name}/${resolve_base_dir:${run_path}, null, false}
+log_file: ${hydra:runtime.output_dir}/${task_name}.log
+config_file: ${hydra:runtime.output_dir}/config.yaml

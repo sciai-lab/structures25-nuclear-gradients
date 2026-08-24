@@ -1,0 +1,19 @@
+# @package _global_
+
+# Use this config for a quick training run with an oracle model,
+# which always returns the ground truth labels.
+# (This is useful, e.g. when debugging loss functions)
+
+defaults:
+  - default
+  - limit # Oracle does not need to run over the whole dataset
+  - override /model: oracle
+
+tags: ["oracle"]
+
+trainer:
+  max_epochs: 1
+
+data:
+  datamodule:
+    do_denop_val: False

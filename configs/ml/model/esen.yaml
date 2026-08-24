@@ -1,0 +1,59 @@
+defaults:
+  - default
+
+net:
+  _target_: mldft.ml.models.components.esen_components.esen.eSEN
+
+  backbone:
+    _target_: mldft.ml.models.components.esen_components.esen.eSEN_Backbone
+    max_num_elements: 100
+    sphere_channels: 128
+    lmax: 4
+    mmax: 4
+    grid_resolution: null # Default is None
+    otf_graph: True
+    max_neighbors: 300
+    use_pbc: False
+    use_pbc_single: False
+    cutoff: 6.0
+    edge_channels: 128
+    distance_function: "gaussian"
+    num_distance_basis: 512
+    regress_forces: False
+    regress_stress: False
+    num_layers: 4
+    hidden_channels: 128 # Used in eSEN_Block and eSEN's energy_block
+    norm_type: "rms_norm_sh"
+    act_type: "gate" # "s2" for grid based
+    mlp_type: "spectral" # "grid" for grid based
+    use_envelope: True
+    activation_checkpointing: False
+
+  density_embedding:
+    _target_: mldft.ml.models.components.equiformerv2_components.density_embedding.DensityEmbedding
+    density_embedding_lmax_list: ["${model.net.backbone.lmax}"]
+    n_channels: ${model.net.backbone.sphere_channels}
+    basis_info: ${data.basis_info}
+    apply_pyscf_to_e3nn_conversion: false
+
+  atom_ref_module:
+    _target_: mldft.ml.models.components.atom_ref.AtomRef.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    mode: scalar_only
+
+  initial_guess_delta_module: null # Set this to an InitialGuessDelta config to enable pred_diff.
+
+  gradient_module: null # Defaults to None in eSEN
+
+  # Feature-wise rescaling module
+  feature_wise_rescaling_module:
+    _target_: mldft.ml.models.components.dimension_wise_rescaling.DimensionWiseRescaling.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    s_coeff: 50
+    s_grad: 0.05
+    epsilon: 1e-8
+    equivariant: True

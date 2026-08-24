@@ -1,0 +1,9 @@
+_target_: mldft.datagen.datasets.omol.OMol
+name: OMolPBE
+filename: omol
+subset: null
+
+raw_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/raw/
+kohn_sham_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/kohn_sham/
+label_dir: ${oc.env:DFT_DATA}/${dataset.name}/labels/
+subset_dir: ${oc.env:DFT_DATA}/${dataset.subset}

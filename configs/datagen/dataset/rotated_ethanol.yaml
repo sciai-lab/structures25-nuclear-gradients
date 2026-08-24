@@ -1,0 +1,8 @@
+_target_: mldft.datagen.datasets.rotated_ethanol.RotatedEthanolDataset
+name: RotatedEthanol
+filename: rotated_ethanol
+
+rotations_dir: ${oc.env:DFT_DATA}/${dataset.name}/rotations
+raw_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/raw
+kohn_sham_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/kohn_sham
+label_dir: ${oc.env:DFT_DATA}/${dataset.name}/labels

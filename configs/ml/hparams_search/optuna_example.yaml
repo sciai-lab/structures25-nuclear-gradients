@@ -1,0 +1,49 @@
+# @package _global_
+
+# example hyperparameter optimization of some experiment with Optuna:
+# python train.py hparams_search=optuna_example experiment=example
+
+defaults:
+  - override /hydra/sweeper: optuna
+  # see https://github.com/facebookresearch/hydra/blob/main/plugins/hydra_optuna_sweeper/hydra_plugins/hydra_optuna_sweeper/config.py#L196 for other options
+  # grid sampler might still sample identical values: https://github.com/optuna/optuna/issues/2021#issuecomment-729368756
+  # also see: https://github.com/optuna/optuna/issues/2021
+  - override /hydra/sweeper/sampler: grid
+
+# choose metric which will be optimized by Optuna
+# make sure this is the correct name of some metric logged in lightning module!
+optimized_metric: "val_metrics_best/mae_energy" # TODO: add a "total" metric that summarizes all metrics
+
+# here we define Optuna hyperparameter search
+# it optimizes for value returned from function with @hydra.main decorator
+# docs: https://hydra.cc/docs/next/plugins/optuna_sweeper
+hydra:
+  mode: "MULTIRUN" # set hydra to multirun by default if this config is attached
+
+  sweeper:
+    _target_: hydra_plugins.hydra_optuna_sweeper.optuna_sweeper.OptunaSweeper
+
+    # Storage URL to persist optimization results. Requires MySQL server to be running.
+    # For url format, see https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls.
+    storage: "mysql://root@127.0.0.1:31666/optuna"
+
+    # name of the study to persist optimization results
+    study_name: ${name}
+
+    # number of parallel workers.
+    # Keep this at 1 and start multiple jobs by running the same python command in multiple terminals.
+    # See https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/004_distributed.html
+    n_jobs: 1
+
+    # 'minimize' or 'maximize' the objective
+    direction: minimize
+
+    # total number of runs that will be executed (except for GridSampler, which will run all combinations)
+    n_trials: 1
+
+    # define hyperparameter search space
+    params:
+      #      model.optimizer.lr: interval(0.0001, 0.1)
+      #      data/transforms: choice(no_basis_transforms, local_frames, local_frames_atomwise_natrep)
+      data.target_key: choice(kin, kin_minus_apbe, kin_plus_xc)
+      model/loss_function: choice(l1, smooth_l1)

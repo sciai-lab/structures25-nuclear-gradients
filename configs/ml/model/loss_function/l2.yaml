@@ -1,0 +1,11 @@
+defaults:
+  - l1
+
+energy_loss:
+  loss:
+    loss_function:
+      _target_: torch.nn.MSELoss
+gradient_loss:
+  loss:
+    loss_function:
+      _target_: torch.nn.MSELoss

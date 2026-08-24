@@ -1,0 +1,47 @@
+# @package _global_
+
+defaults:
+  - dataset: omol_pbe
+  - extras: default
+  - hydra: default
+  - _self_
+
+# OMol dataset filtering configuration
+# Format: dict mapping multiplicity (int) to list of allowed charges for that multiplicity
+# Example command line override: allowed_charges_per_multiplicity='{1:[-1,0,1], 2:[-1,0,1], 3:[0]}'
+allowed_charges_per_multiplicity: null
+allowed_elements: [1, 6, 7, 8, 9, 15, 16, 17]
+allowed_data_ids: null # Choose out of 'ani2x', 'biomolecules', 'elytes', 'geom_orca6', 'metal_complexes', 'orbnet_denali', 'reactivity', 'rgd', 'spice', 'trans1x'
+max_num_heavy_atoms: null
+min_num_heavy_atoms: null
+mols_per_atom_count: null # Maximum number of molecules per heavy atom count
+
+max_num_mols: null # Maximum number of molecules to include in the dataset
+write_xyz: true
+
+task_name: "omol_dataset_generation"
+
+omol_split: "train" # Options: train, train_4M, val
+
+# Location of the AseDB OMol dataset source directory
+dataset_src: "${oc.env:DFT_DATA}/OMol25/${omol_split}"
+# Subset specific output directory
+output_dir: "${oc.env:DFT_DATA}/${dataset.subset}"
+
+# Precomputed metadata cache for fast filtering (run precompute_omol_metadata.py first)
+metadata_cache: "${oc.env:DFT_DATA}/OMol25/${omol_split}/metadata_cache.npz"
+
+# Per-molecule files to ship via Globus. Each (molecule dir, filename) pair
+# becomes one batch line, flattened to family/<shard>/<dir>__<digest>__<name>.
+# Shard width is hard-coded in mldft.datagen.generate_omol_dataset.SHARD_WIDTH.
+remote_files:
+  - density_mat.npz
+
+# Globus batch chunk size (one chunk file per N transfer lines).
+globus_chunk_size: 10000
+
+# Whether to overwrite existing subset
+overwrite: false
+
+log_file: ${hydra:runtime.output_dir}/omol_dataset.log
+config_file: ${hydra:runtime.output_dir}/config.yaml

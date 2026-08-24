@@ -1,0 +1,16 @@
+# @package _global_
+
+# Trains and validates on 3 batches only.
+# Use to verify that model and training pipeline are in principle able to fit the data.
+
+defaults:
+  - default
+
+trainer:
+  max_epochs: 200
+  overfit_batches: 3
+
+data:
+  datamodule:
+    # Denop validation is not really relevant for overfitting
+    do_denop_val: False

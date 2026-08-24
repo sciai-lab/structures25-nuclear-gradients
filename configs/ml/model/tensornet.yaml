@@ -1,0 +1,51 @@
+# Configuration file for the TensorNet model
+# the given default vales are from the paper and own tests
+# the TensorNet class is defined in mldft/ml/models/components/tensornet.py
+# in my tests batch size di not change performance, so I set it to 128 typically
+defaults:
+  - default
+  - override scheduler: linear
+net:
+  _target_: mldft.ml.models.components.tensornet.TensorNet
+  basis_info: ${data.basis_info}
+  hidden_channels: 256 # default is 128 for MD17 and 256 for QM9
+  num_layers: 3 # defualtis 1 0r 2 for MD17 and 3 for QM9
+  max_z: 5 # number of different atom sorts, for MD17 this is 3 for QM9 this is 5
+  num_rbf: 64 # default is 32 for MD17 and 64 for QM9
+  cutoff_lower: 0
+  cutoff_upper: 5 # default is 4.5 for MD17 and 5 for QM9
+  max_num_neighbors: 10 # using default values for cutoff, one can use 8 for MD17 and 10 for QM9
+  activation: silu
+  equivariance_invariance_group: O(3)
+  check_errors: true
+  static_shapes: true
+  trainable_rbf: false
+  # the next 4 flags define how the density coefficients are included in the model
+  # if all are set to false, the model will not use the density coefficients
+  # while one can optimize them as hyperparameters, the default values (that worked best for me) are all true but dens_mult
+  dens_mult: false
+  outdens: true
+  indens: true
+  dens_int: true
+  atomref_on: true
+  rescaling_on: true
+  dtype: torch.float32
+
+  # Atom Ref Module
+  atom_ref_module:
+    _target_: mldft.ml.models.components.atom_ref.AtomRef.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    mode: scalar_only
+
+  # Feature-wise rescaling module
+  feature_wise_rescaling_module:
+    _target_: mldft.ml.models.components.dimension_wise_rescaling.DimensionWiseRescaling.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    s_coeff: 50
+    s_grad: 0.05
+    epsilon: 1e-8
+    equivariant: True

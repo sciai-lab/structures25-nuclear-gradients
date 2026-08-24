@@ -1,0 +1,21 @@
+# @package _global_
+
+defaults:
+  - /model/loss_function/l1
+
+model:
+  loss_function:
+    nuclear_gradient_loss:
+      weight: 1
+      loss:
+        _target_: mldft.ml.models.components.loss_function.NuclearGradientLoss
+        loss_function:
+          _target_: torch.nn.L1Loss
+          reduction: none
+        sample_weigher:
+          _target_: mldft.ml.models.components.sample_weighers.HasNucGradSampleWeigher
+
+data:
+  datamodule:
+    dataset_kwargs:
+      load_nuclear_gradients: true

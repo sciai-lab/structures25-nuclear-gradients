@@ -1,0 +1,7 @@
+defaults:
+  - default
+
+net:
+  _target_: mldft.ml.models.components.toy_net.ToyNet
+  basis_info: ${data.basis_info}
+  k_neighbors: 2

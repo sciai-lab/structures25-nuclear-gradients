@@ -1,0 +1,15 @@
+defaults:
+  - esen
+
+net:
+  backbone:
+    # OMol25 large backbone values, keeping local non-PBC / non-force defaults.
+    sphere_channels: 256
+    lmax: 6
+    mmax: 2
+    max_neighbors: 30
+    cutoff: 12.0
+    edge_channels: 256
+    num_distance_basis: 256
+    num_layers: 16
+    hidden_channels: 256

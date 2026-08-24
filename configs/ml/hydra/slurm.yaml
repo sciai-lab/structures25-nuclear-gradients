@@ -1,0 +1,36 @@
+# To use submitit you have to do a multirun, so run with mldft_train -m
+
+# enable color logging
+defaults:
+  - override hydra_logging: colorlog
+  - override job_logging: colorlog
+  - override launcher: submit_slurm_helix
+
+# output directory, generated dynamically on each run
+run:
+  # see below for details
+  dir: ${paths.log_dir}/${task_name}/runs/${dir_counter:${paths.log_dir}/${task_name}/runs,3}_${name}_${smart_override_dirname:${hydra.job.override_dirname}}
+sweep:
+  # Use file-based counter on login node, which is then reused on compute node
+  dir: ${paths.log_dir}/${task_name}/runs/${dir_counter:${paths.log_dir}/${task_name}/runs,3}_${name}_${smart_override_dirname:${hydra.job.override_dirname}}
+
+  # This will use the slurm job id when using the dir counter, since it is run in the actual job
+  subdir: ${oc.env:SLURM_JOB_ID,${hydra.job.num}}
+
+job_logging:
+  handlers:
+    file:
+      # Incorporates fix from https://github.com/facebookresearch/hydra/pull/2242
+      filename: ${hydra.runtime.output_dir}/${task_name}.log
+
+job:
+  config:
+    override_dirname:
+      exclude_keys:
+        - name # already included in run.dir
+        - hparams_search # specifics already in override_dirname
+        - trainer
+
+callbacks:
+  git_logging:
+    _target_: mldft.utils.log_utils.hydra_callbacks.GitInfo

@@ -1,0 +1,10 @@
+_target_: mldft.datagen.datasets.qm7x.QM7XFirstBatch
+name: QM7X
+filename: qm7x
+# qm7x contains H, C, N, O, S, Cl -> [1, 6, 7, 8, 16, 17]
+# for the time being we want to train only on H, C, N, O
+allowed_atomic_numbers: [1, 6, 7, 8]
+
+raw_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/raw/
+kohn_sham_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/kohn_sham/
+label_dir: ${oc.env:DFT_DATA}/${dataset.name}/labels/

@@ -1,0 +1,36 @@
+# @package hydra.launcher
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+
+# BaseConf
+# Time Settings
+timeout_min: 7200
+# signal_delay_s: 180 seems to send USR2
+# Node Settings
+nodes: 1
+tasks_per_node: 1
+cpus_per_task: ${data.datamodule.num_workers}
+gpus_per_node: 1
+mem_gb: 32
+job_name: ${name}
+stderr_to_stdout: true
+
+# SlurmConf
+partition: gpu-single
+max_num_timeout: 10
+signal_delay_s: 180
+
+# Python environment setup
+setup:
+  - "source ~/.bashrc"
+  - "module purge"
+  - "module load compiler/gnu/14.1"
+  - "export CUDA_VISIBLE_DEVICES=$SLURM_LOCALID"
+  - "export HYDRA_FULL_ERROR=1"
+
+additional_parameters:
+  open-mode: "append"
+  # Keep full environment propagation so SUBMITIT_EXECUTOR reaches the srun-launched task.
+  export: "ALL,DFT_DATA,DFT_MODELS,MLDFT_RUN_COUNTER"
+  gres: "gpu:1"
+
+submitit_folder: "${hydra.sweep.dir}/%j_submitit_logs"

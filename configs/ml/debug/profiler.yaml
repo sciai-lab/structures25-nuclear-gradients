@@ -1,0 +1,46 @@
+# @package _global_
+
+# This config can be used to profile the training of a model. By default it does 100 train batches and no validation.
+# It uses the PyTorch profiler and saves it to the standard model output directory. It uses sensible settings if you're
+# interested in the run time, the kwargs can be read in the pytorch documentation. For memory usage, set
+# `profile_memory: True`. At the bottom, there are some hints on how to address errors when using e3nn linear layers.
+
+defaults:
+  - override /callbacks: none
+
+# overwrite task name so debugging logs are stored in separate folder
+task_name: "debug"
+
+trainer:
+  max_epochs: 1
+  profiler:
+    _target_: lightning.pytorch.profilers.PyTorchProfiler
+    dir_path: ${hydra:runtime.output_dir}/profiler
+    filename: profiler
+    export_to_chrome: True
+    row_limit: 1000
+    with_stack: True
+    profile_memory: False
+    record_shapes: True
+    schedule:
+      _target_: torch.profiler.schedule
+      wait: 60
+      warmup: 2
+      active: 5
+  limit_train_batches: 70 # do some more steps to not have shutdown in the profiling trace
+  limit_val_batches: 0
+  enable_checkpointing: False # This breaks when using these e3nn settings and we don't need checkpoints for profiling
+
+validate: False
+denop_val: False
+# ---------------------------------------------------------------------------------
+# e3nn profiling note
+# ---------------------------------------------------------------------------------
+# Profiling with Lightning adds forward hooks, which does not work with e3nn's
+# scripted FX path. The training entrypoint handles this automatically while a
+# profiler is configured by calling:
+#
+#   e3nn.set_optimization_defaults(jit_script_fx=False)
+#
+# in [mldft/ml/train.py]. No manual edits to the installed e3nn package should
+# be necessary.

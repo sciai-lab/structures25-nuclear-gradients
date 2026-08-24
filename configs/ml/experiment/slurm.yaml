@@ -1,0 +1,8 @@
+# @package _global_
+
+# This is a template for Slurm training. Override trainer explicitly only when needed
+# (for example DDP), otherwise use the default Lightning trainer.
+
+defaults:
+  - override /callbacks: slurm
+  - override /hydra: slurm

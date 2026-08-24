@@ -1,0 +1,8 @@
+defaults:
+  - default
+
+_target_: mldft.ofdft.optimizer.TrustRegionConstrained
+
+initial_tr_radius: 0.01
+initial_constr_penalty: 1.0
+use_projected_gradient: true

@@ -1,0 +1,66 @@
+# https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.ModelCheckpoint.html
+
+model_checkpoint:
+  _target_: mldft.ml.callbacks.checkpoint.ModelCheckpointWithPermissions
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "val_loss_total_epoch_{epoch:03d}"
+  monitor: "val_loss/total"
+  mode: "min"
+  save_last: False
+  auto_insert_metric_name: False
+  verbose: False # verbosity mode
+  save_top_k: 1 # save k best models (determined by above metric)
+  save_weights_only: False # if True, then only the model’s weights will be saved
+  every_n_train_steps: null # number of training steps between checkpoints
+  train_time_interval: null # checkpoints are monitored at the specified time interval
+  every_n_epochs: null # number of epochs between checkpoints
+  save_on_train_epoch_end: null # whether to run checkpointing at the end of the training epoch or the end of validation
+
+model_checkpoint_gs_abs_energy_error:
+  _target_: mldft.ml.callbacks.checkpoint.ModelCheckpointWithPermissions
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "gs_abs_energy_error_epoch_{epoch:03d}"
+  monitor: "val_denop_metrics/gs_abs_energy_error"
+  mode: "min"
+  save_last: False
+  auto_insert_metric_name: False
+  save_top_k: ${mux:${denop_val}, 1, 0} # don't save if denop_val is False
+  save_weights_only: False
+  every_n_train_steps: null
+  train_time_interval: null
+  every_n_epochs: null
+  save_on_train_epoch_end: null
+
+model_checkpoint_gs_l2_norm:
+  _target_: mldft.ml.callbacks.checkpoint.ModelCheckpointWithPermissions
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "gs_l2_norm_epoch_{epoch:03d}"
+  monitor: "val_denop_metrics/gs_l2_norm"
+  mode: "min"
+  save_last: False
+  auto_insert_metric_name: False
+  save_top_k: ${mux:${denop_val}, 1, 0} # don't save if denop_val is False
+  save_weights_only: False
+  every_n_train_steps: null
+  train_time_interval: null
+  every_n_epochs: null
+  save_on_train_epoch_end: null
+
+# The "last" checkpoint callback is used for a continued training
+# and therefore needs to be called last to contain all states of the previous checkpoint callbacks, otherwise saved checkpoints will not be the newest ones
+# These states are loaded to continue the "best_metric" checkpoints.
+model_checkpoint_last:
+  _target_: mldft.ml.callbacks.checkpoint.ModelCheckpointWithPermissions
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "last_epoch_{epoch:03d}"
+  monitor: "epoch"
+  mode: "max"
+  save_last: False
+  auto_insert_metric_name: False
+  verbose: False # verbosity mode
+  save_top_k: 1 # save k best models (determined by above metric)
+  save_weights_only: False # if True, then only the model’s weights will be saved
+  every_n_train_steps: null # number of training steps between checkpoints
+  train_time_interval: null # checkpoints are monitored at the specified time interval
+  every_n_epochs: null # number of epochs between checkpoints
+  save_on_train_epoch_end: null # whether to run checkpointing at the end of the training epoch or the end of validation

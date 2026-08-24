@@ -1,0 +1,9 @@
+[flake8]
+extend-ignore = E203,E402,E501,E741,F401,F841,RST2,RST301,RST304,RST306
+rst-directives = testsetup,testcode,testoutput
+rst-roles = py:obj,py:mod,py:func,py:data,py:exc,py:const,py:class,py:meth,py:attr
+
+# Per-directory ignores
+per-file-ignores =
+    # Ignore E403 (imports using *)
+    mldft/ml/models/components/equiformerv2_components/*:E741

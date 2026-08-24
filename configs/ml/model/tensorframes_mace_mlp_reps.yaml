@@ -1,0 +1,94 @@
+# example of a tensorframes based model using the TensorMace building block but with MLP representation instead of irreps
+# The hyperparameters here are likely not optimized.
+
+defaults:
+  - default
+  - override scheduler: linear
+
+net:
+  _target_: mldft.ml.models.components.tensorframes_components.tensorframes_net.TensorFramesNet
+  net_main:
+    _target_: mldft.ml.models.components.tensorframes_components.tensormace_net.TensorMACEnet
+    l_frames_module:
+      _target_: tensorframes.lframes.classical_lframes.IdentityLFrames
+    radial_module:
+      _target_: tensorframes.nn.embedding.radial.BesselEmbedding
+      num_frequencies: 32
+      cutoff: 10
+      envelope:
+        _target_: tensorframes.nn.envelope.EnvelopePoly
+        p: 5
+    angular_module:
+      _target_: tensorframes.nn.embedding.axial.AxisWiseBesselEmbedding
+      num_frequencies: 20
+    edge_embedding_module:
+      _target_: mldft.ml.models.components.tensorframes_components.edge_embedding.EdgeEmbedding
+      out_dim: 128
+      radial_dim: ${model.net.net_main.radial_module.num_frequencies}
+      angular_dim: 60
+      hidden_layers: [512]
+      edge_attr_dim: 0
+      dropout: 0.0
+    layers: 4
+    reps:
+      _target_: tensorframes.reps.MLPReps
+      dim: 664
+      reps_id: 0
+    edge_emb_dim: 128
+    hidden_dim: 512
+    max_order: 3
+    num_types: ${get_len:${data.datamodule.basis_info.atomic_numbers}}
+    atom_wise: false
+    dropout: 0.0
+    bias: false
+    output_reps:
+      _target_: tensorframes.reps.Irreps
+      irreps: "128x0+64x1+32x2+16x3+8x4"
+    global_out: false
+    input_reps:
+      _target_: tensorframes.reps.Irreps
+      irreps: "128x0+64x1+32x2+16x3+8x4"
+
+  # density embedding
+  density_embedding:
+    _target_: mldft.ml.models.components.tensorframes_components.density_embedding.DensityEmbedding
+    embedding_irreps: "i128x0+64x1+32x2+16x3+8x4"
+    basis_info: ${data.basis_info}
+
+  # Atom Ref Module
+  atom_ref_module:
+    _target_: mldft.ml.models.components.atom_ref.AtomRef.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    mode: scalar_only
+
+  # Initial Guess Module
+  initial_guess_module:
+    _target_: mldft.ml.models.components.tensorframes_components.initial_guess_delta_module.InitialGuessDelta
+    embedding_irreps: ${model.net.net_main.output_reps}
+    basis_info: ${data.basis_info}
+    dataset_statistics: ${data.dataset_statistics}
+    weigher_key: "constant"
+
+  # Feature-wise rescaling module
+  dimension_wise_rescaling_module:
+    _target_: mldft.ml.models.components.dimension_wise_rescaling.DimensionWiseRescaling.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    s_coeff: 50
+    s_grad: 0.05
+    epsilon: 1e-8
+    equivariant: True # this is important!
+
+  energy_mlp:
+    _target_: mldft.ml.models.components.tensorframes_components.energy_mlp_wrapped.EnergyMLPWrapped
+    in_reps: ${model.net.net_main.output_reps}
+    hidden_channels: [768, 768, 1]
+    activation_layer: "SiLU"
+    # norm_layer: "layer_norm"
+    use_torchvision: false
+    # activation_layer:
+    #   _target_: hydra.utils.get_class
+    #   path: torch.nn.SiLU

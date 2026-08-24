@@ -1,0 +1,11 @@
+defaults:
+  - esen
+
+net:
+  backbone:
+    # OMol25 small backbone values, keeping local non-PBC / non-force defaults.
+    lmax: 2
+    mmax: 2
+    otf_graph: False
+    max_neighbors: 30
+    num_distance_basis: 64

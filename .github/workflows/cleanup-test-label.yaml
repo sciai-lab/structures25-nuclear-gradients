@@ -1,0 +1,61 @@
+name: Cleanup test label
+
+# Runs after the Tests workflow completes. workflow_run runs in the context of
+# the default branch, so this trusted workflow can hold the write permission
+# needed to remove the trigger label without giving that permission to Tests.
+on:
+  workflow_run:
+    workflows: ["Tests"]
+    types: [completed]
+
+jobs:
+  remove_label:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Remove run-tests label
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const run = context.payload.workflow_run
+            const { data: jobsData } = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: run.id,
+            })
+            const runTestsJob = jobsData.jobs.find((job) =>
+              job.name.startsWith('run_tests_ubuntu'),
+            )
+            if (!runTestsJob || runTestsJob.conclusion === 'skipped') return
+            let prNumbers = (Array.isArray(run.pull_requests) ? run.pull_requests : [])
+              .map((pr) => pr?.number)
+              .filter((number) => typeof number === 'number')
+            if (prNumbers.length === 0) {
+              const head = `${run.head_repository.owner.login}:${run.head_branch}`
+              const { data } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                head,
+              })
+              prNumbers = data
+                .filter((pr) => pr.head.sha === run.head_sha)
+                .map((pr) => pr.number)
+              if (prNumbers.length !== 1) return
+            }
+            for (const prNumber of [...new Set(prNumbers)]) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: 'run-tests',
+                })
+              } catch (e) {
+                if (e.status !== 404) throw e
+              }
+            }

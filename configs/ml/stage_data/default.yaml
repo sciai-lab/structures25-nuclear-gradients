@@ -1,0 +1,19 @@
+enabled: false
+
+# Source and destination DFT_DATA roots.
+# Keep src on global storage and stage to local node SSD via $TMPDIR.
+src_dft_data: ${oc.env:DFT_DATA}
+dst_dft_data: $TMPDIR/mldft_data
+
+# Defaults match the active training data config.
+dataset: ${data.dataset_name}
+transform: ${data.transforms.name}
+target_key: ${data.target_key}
+label_subdir: null
+split_file: null
+
+# Include denop HDF5 shards if denop validation is enabled.
+include_denop_h5: ${denop_val}
+
+# For multi-process jobs, non-zero local ranks wait for local rank 0 to finish staging.
+wait_timeout_s: 7200

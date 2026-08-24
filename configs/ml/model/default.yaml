@@ -1,0 +1,36 @@
+_target_: mldft.ml.models.mldft_module.MLDFTLitModule
+
+defaults:
+  - optimizer: adamw
+  - loss_function: l1
+  - scheduler: cosine
+
+variational: true
+target_key: ${data.target_key}
+compile: false
+
+basis_info: ${data.basis_info}
+
+# Configures how frequently the loss is logged
+loss_log_interval: 50
+
+# Configures how frequently metrics are evaluated
+metric_interval: 50
+
+# Metric for direct ground state prediction
+enable_initial_guess_metrics: false
+
+# Determines whether the scheduler does iterations on a step or epoch level
+scheduler_interval: "epoch"
+
+# Configures how often the logging mixins are called. Set to None to disable.
+logging_mixin_interval: 1000
+# Setting this to true will show the logging mixins in the progress bar, can be useful for debugging.
+show_logging_mixins_in_progress_bar: false
+
+do_denop_val: ${denop_val}
+dataset_statistics:
+  _target_: mldft.ml.preprocess.dataset_statistics.DatasetStatistics
+  path: ${to_no_basis_transforms_dataset_statistics:${data.dataset_statistics.path},${data.transforms.name}}
+density_optimizer: ${density_optimizer}
+denop_settings: ${denop_settings}

@@ -1,0 +1,8 @@
+# Bessel radial embedding
+defaults:
+  - default
+
+_target_: mldft.ml.models.components.radial_embedding.BesselEmbedding
+learn_frequencies: True
+init_frequency_range: [0.1, 4]
+cut_off_radius: ${data.cutoff}

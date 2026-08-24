@@ -1,0 +1,7 @@
+defaults:
+  - default
+
+plugins:
+  _target_: lightning.pytorch.plugins.environments.SLURMEnvironment
+
+enable_progress_bar: False

@@ -1,0 +1,10 @@
+defaults:
+  - default
+
+dataset_name: OMol_even_tempered_2.0
+target_key: tot
+
+basis_info:
+  _target_: mldft.ml.data.components.basis_info.BasisInfo.from_dataset_info_yaml
+  path_to_data_info: ${oc.env:DFT_DATA}/${data.dataset_name}/dataset_info.yaml
+  atomic_numbers: [1, 6, 7, 8, 9, 15, 16, 17] # H, C, N, O, F, P, S, Cl for OMol_Biomolecules

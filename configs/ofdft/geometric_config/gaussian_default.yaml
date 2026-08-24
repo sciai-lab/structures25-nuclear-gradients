@@ -1,0 +1,8 @@
+# Default convergence settings of the Gaussian package (https://gaussian.com/opt/).
+# They are also the default of geomeTRIC (https://geometric.readthedocs.io/en/latest/how-it-works.html#convergence-criteria).
+
+convergence_energy: 1.0e-6 # Eh
+convergence_grms: 3.0e-4 # Eh/Bohr
+convergence_gmax: 4.5e-4 # Eh/Bohr
+convergence_drms: 1.2e-3 # Angstrom
+convergence_dmax: 1.8e-3 # Angstrom

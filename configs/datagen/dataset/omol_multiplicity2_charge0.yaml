@@ -1,0 +1,13 @@
+# @package _global_
+
+#kohn_sham:
+#  spin: 1
+
+dataset:
+  _target_: mldft.datagen.datasets.misc.MiscXYZ
+  name: OMol_M2_C0_sep_perturbed
+  filename: omol
+
+  raw_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/raw/
+  kohn_sham_data_dir: ${oc.env:DFT_DATA}/${dataset.name}/kohn_sham/
+  label_dir: ${oc.env:DFT_DATA}/${dataset.name}/labels/

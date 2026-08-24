@@ -1,0 +1,6 @@
+_target_: mldft.ofdft.scheduler.OffsetOneCycleScheduler
+_partial_: true
+max_lr: 0.009
+total_steps: 2000
+offset_steps: 80
+min_lr: 0.003

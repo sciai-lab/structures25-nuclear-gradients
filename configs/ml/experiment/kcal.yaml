@@ -1,0 +1,16 @@
+# @package _global_
+
+defaults:
+  - md17_apbe
+
+tags: ["md17", "kcal"]
+
+model:
+  net:
+    dimension_wise_rescaling_module:
+      s_grad: 0.000079680054871068 # 0.05 kcal/mol
+    final_energy_factor: 0.0015936010974213599 # hartree per kcal/mol, makes the nn predict in kcal/mol
+  loss_function:
+    energy_weight: 627.5096080305927 # 1 (kcal/mol per hartree)
+    gradient_weight: 62.75096080305927 # 0.1 (kcal/mol per hartree)
+    coefficient_weight: 0.08

@@ -1,0 +1,7 @@
+defaults:
+  - default
+
+_target_: mldft.ofdft.optimizer.SLSQP
+
+grad_scale: 0.01
+use_projected_gradient: true

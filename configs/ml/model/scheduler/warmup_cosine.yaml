@@ -1,0 +1,15 @@
+_target_: mldft.utils.lr_scheduling.sequential_scheduler
+_partial_: true
+step_attr: [total_iters, T_max]
+milestones: [10]
+schedulers:
+  - _target_: torch.optim.lr_scheduler.LinearLR
+    _partial_: true
+    start_factor: 0.01
+    end_factor: 1
+    total_iters: 10
+  - _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+    _partial_: true
+    T_max: 80 # Should be set to Max_epoch - total_warmup_iters
+    eta_min: 0
+    last_epoch: -1

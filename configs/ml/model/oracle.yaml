@@ -1,0 +1,7 @@
+defaults:
+  - default
+
+variational: False
+
+net:
+  _target_: mldft.ml.models.components.oracle.MLDFTOracle

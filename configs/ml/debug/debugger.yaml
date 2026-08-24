@@ -1,0 +1,15 @@
+# @package _global_
+
+# Use this config when using the python debugger to debug your code.
+
+defaults:
+  - default
+
+trainer:
+  max_epochs: 1
+  accelerator: cpu # debuggers don't like gpus
+  devices: 1 # debuggers don't like multiprocessing
+
+data:
+  num_workers: 0 # debuggers don't like multiprocessing
+  pin_memory: False # disable gpu memory pin

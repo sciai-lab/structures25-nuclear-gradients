@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - override /data: qm9_perturbed_fock
+  - override /model: graphformer_1l_layernorm_node_no_dropout
+  - override /trainer: default
+  - override /data/transforms: local_frames_global_natrep
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["qm9_perturbed_fock", "kin_plus_xc", "graphformer_1l_full_batchnorm_no_dropout"]
+
+data:
+  target_key: "kin_plus_xc"
+  datamodule:
+    batch_size: 128
+
+trainer:
+  max_epochs: 90
+
+model:
+  optimizer:
+    lr: 7e-5
+  net:
+    gnn_module:
+      n_layers: 4

@@ -1,0 +1,3 @@
+defaults:
+  - slurm
+  - override launcher: submit_slurm_horeka

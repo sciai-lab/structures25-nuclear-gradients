@@ -1,0 +1,23 @@
+# @package _global_
+defaults:
+  - override /data: qm9_perturbed_fock # the base dataset config determines dataset statistics, basis info etc. independent of the split file
+
+data:
+  datamodule:
+    split_file:
+      _target_: mldft.utils.dynamic_splitfiles.construct_splitfile
+      split_files:
+        - "${oc.env:DFT_DATA}/split_files/QM9_perturbed_fock_G3DLayer_3_20p_mean_kmeanspp.pkl"
+        - _target_: mldft.utils.dynamic_splitfiles.Subsample
+          split_file: "${oc.env:DFT_DATA}/QM9_perturbed_fock/split.pkl"
+          n_samples: 1000
+          method: "first"
+        - _target_: mldft.utils.dynamic_splitfiles.Subsample
+          split_file: "${oc.env:DFT_DATA}/QM9_perturbed_fock/split.pkl"
+          n_samples: 1000
+          method: "last"
+        - _target_: mldft.utils.dynamic_splitfiles.Subsample
+          split_file: "${oc.env:DFT_DATA}/QMUGSBin0_perturbed_fock/split.pkl"
+          percentage: 0.5
+          method: "seeded_random"
+      output_file: ${paths.output_dir}/split_file.pkl

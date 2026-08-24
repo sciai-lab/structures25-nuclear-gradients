@@ -1,0 +1,45 @@
+# @package _global_
+defaults:
+  - _self_
+  - kohn_sham: default
+  - dataset: qm9 # name of the dataset yaml file
+  - label_src: ks_iterations
+  - extras: default
+  - hydra: default
+  - preset: null
+
+task_name: datagen
+
+# Density Fitting Method
+density_fitting_method: "hartree+external_mofdft"
+of_basis_set: "even_tempered_2.5"
+
+# Specify how many and which molecules to generate
+n_molecules: 1
+start_idx: 0
+selected_ids: null # Provides a mask for the molecules to generate, if None all molecules will be generated
+
+# Specify how many processes and threads, will be configured automatically if not specified
+num_processes: ???
+num_threads_per_process: 1
+max_memory_per_process: ???
+# If you suspect corrupted files, set this to true to check them
+verify_files: False
+remove_broken_files: True
+# The file used for logging, will be generated automatically
+log_file: ${hydra:runtime.output_dir}/${task_name}.log
+log_level: INFO
+config_file: ${hydra:runtime.output_dir}/config.yaml
+# Interval in seconds to update progress bar and how many processes should report progress
+# Progress is measured by counting completed tasks in the filequeue which may be slow for large datasets
+# Update every 30 minutes by default
+progress_update_interval: 1800
+# Print progress bar in every 20 slurm tasks by default (only when using slurm array jobs)
+pbar_every_n_tasks: 20
+# Override the existing filequeue directory
+override_filequeue: false
+filequeue:
+  queue_dir: filequeue
+  stale_after: 600
+  hb_interval: 120
+  recover_interval: 3600

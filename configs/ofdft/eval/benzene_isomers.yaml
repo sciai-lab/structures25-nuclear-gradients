@@ -1,0 +1,8 @@
+# @package _global_
+
+split_file_path: ${oc.env:DFT_DATA}/BenzeneIsomers/split.pkl
+split: "test"
+n_molecules: 191
+
+density_optimizer:
+  max_cycle: 5000

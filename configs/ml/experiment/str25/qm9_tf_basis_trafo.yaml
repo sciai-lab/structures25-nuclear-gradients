@@ -1,0 +1,8 @@
+# @package _global_
+
+defaults:
+  - str25/default
+  - override /model: graphformer_tf
+  - override /data/transforms: dynamic_local_frames_global_natrep
+
+tags: ["qm9_perturbed_fock", "kin_plus_xc", "graphformer"]

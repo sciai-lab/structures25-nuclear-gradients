@@ -1,0 +1,20 @@
+# Includes the plots from subplots_fast, plus some analytics including grid calcations and hessian eigenvalues
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_all_energy_differences
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_density_and_gradient
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_coefficient_differences_lines
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_dipole_moment
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_integrated_negative_density
+  _partial_: True
+  grid_level: 1
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_final_hessian_eigenvalues
+  _partial_: True

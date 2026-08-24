@@ -1,0 +1,13 @@
+# @package _global_
+
+split_file_path: ${oc.env:DFT_DATA}/QMUGSBin0QM9_perturbed_fock/split.pkl
+split: "test"
+n_molecules: 850
+
+density_optimizer:
+  lr: 1.5e-3
+  max_cycle: 5000
+
+batch_size: 0
+num_threads: 1
+torch_threads_per_worker: 8

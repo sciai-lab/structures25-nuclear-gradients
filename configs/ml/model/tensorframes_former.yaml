@@ -1,0 +1,162 @@
+# example of a tensorframes based model using the TensorFormer building block
+# The hyperparameters here are likely not optimized.
+
+defaults:
+  - default
+
+net:
+  _target_: mldft.ml.models.components.tensorframes_components.tensorframes_net.TensorFramesNet
+  net_main:
+    _target_: mldft.ml.models.components.tensorframes_components.molecule_net.MoleculeNet
+    l_frames_module:
+      _target_: tensorframes.lframes.learning_lframes.LearnedGramSchmidtLFrames
+      even_scalar_input_dim: 0
+      radial_dim: ${model.net.net_main.radial_module.num_frequencies}
+      hidden_channels: [256, 256]
+      cutoff: 10
+      anchor_z_axis: true
+      activation_layer:
+        _target_: hydra.utils.get_class
+        path: torch.nn.SiLU
+      envelope:
+        _target_: tensorframes.nn.envelope.EnvelopePoly
+        p: 5
+    radial_module:
+      _target_: tensorframes.nn.embedding.radial.BesselEmbedding
+      num_frequencies: 32
+      cutoff: 10
+      envelope:
+        _target_: tensorframes.nn.envelope.EnvelopePoly
+        p: 5
+    angular_module:
+      _target_: tensorframes.nn.embedding.axial.AxisWiseBesselEmbedding
+      num_frequencies: 20
+    edge_embedding_module:
+      _target_: mldft.ml.models.components.tensorframes_components.edge_embedding.EdgeEmbedding
+      out_dim: 96
+      radial_dim: ${model.net.net_main.radial_module.num_frequencies}
+      angular_dim: 60 # 3 * 20 from above
+      hidden_layers: [256]
+      edge_attr_dim: 0
+      dropout: 0.0
+    layers:
+      _target_: torch.nn.ModuleList
+      modules:
+        - _target_: tensorframes.nn.tensorformer.TensorFormer
+          tensor_reps:
+            _target_: tensorframes.reps.Irreps
+            irreps: "94x0n + 32x0p + 32x1n + 8x1p + 16x2n + 4x2p"
+          num_heads: 4
+          hidden_layers: [512]
+          hidden_value_dim: 96
+          hidden_scalar_dim: 48
+          hidden_activation:
+            _target_: hydra.utils.get_class
+            path: torch.nn.SiLU
+          edge_embedding_dim: ${model.net.net_main.edge_embedding_module.out_dim}
+          attention_weight_dropout: 0.1
+          radial_cutoff: ${model.net.net_main.radial_module.cutoff}
+          stochastic_depth: 0.05
+        - _target_: tensorframes.nn.tensorformer.TensorFormer
+          tensor_reps:
+            _target_: tensorframes.reps.Irreps
+            irreps: ${model.net.net_main.layers.modules.0.tensor_reps.irreps}
+          num_heads: ${model.net.net_main.layers.modules.0.num_heads}
+          hidden_layers: ${model.net.net_main.layers.modules.0.hidden_layers}
+          hidden_value_dim: ${model.net.net_main.layers.modules.0.hidden_value_dim}
+          hidden_scalar_dim: ${model.net.net_main.layers.modules.0.hidden_scalar_dim}
+          hidden_activation: ${model.net.net_main.layers.modules.0.hidden_activation}
+          edge_embedding_dim: ${model.net.net_main.edge_embedding_module.out_dim}
+          attention_weight_dropout: ${model.net.net_main.layers.modules.0.attention_weight_dropout}
+          radial_cutoff: ${model.net.net_main.radial_module.cutoff}
+          stochastic_depth: ${model.net.net_main.layers.modules.0.stochastic_depth}
+        - _target_: tensorframes.nn.tensorformer.TensorFormer
+          tensor_reps:
+            _target_: tensorframes.reps.Irreps
+            irreps: ${model.net.net_main.layers.modules.0.tensor_reps.irreps}
+          num_heads: ${model.net.net_main.layers.modules.0.num_heads}
+          hidden_layers: ${model.net.net_main.layers.modules.0.hidden_layers}
+          hidden_value_dim: ${model.net.net_main.layers.modules.0.hidden_value_dim}
+          hidden_scalar_dim: ${model.net.net_main.layers.modules.0.hidden_scalar_dim}
+          hidden_activation: ${model.net.net_main.layers.modules.0.hidden_activation}
+          edge_embedding_dim: ${model.net.net_main.edge_embedding_module.out_dim}
+          attention_weight_dropout: ${model.net.net_main.layers.modules.0.attention_weight_dropout}
+          radial_cutoff: ${model.net.net_main.radial_module.cutoff}
+          stochastic_depth: ${model.net.net_main.layers.modules.0.stochastic_depth}
+        - _target_: tensorframes.nn.tensorformer.TensorFormer
+          tensor_reps:
+            _target_: tensorframes.reps.Irreps
+            irreps: ${model.net.net_main.layers.modules.0.tensor_reps.irreps}
+          num_heads: ${model.net.net_main.layers.modules.0.num_heads}
+          hidden_layers: ${model.net.net_main.layers.modules.0.hidden_layers}
+          hidden_value_dim: ${model.net.net_main.layers.modules.0.hidden_value_dim}
+          hidden_scalar_dim: ${model.net.net_main.layers.modules.0.hidden_scalar_dim}
+          hidden_activation: ${model.net.net_main.layers.modules.0.hidden_activation}
+          edge_embedding_dim: ${model.net.net_main.edge_embedding_module.out_dim}
+          attention_weight_dropout: ${model.net.net_main.layers.modules.0.attention_weight_dropout}
+          radial_cutoff: ${model.net.net_main.radial_module.cutoff}
+          stochastic_depth: ${model.net.net_main.layers.modules.0.stochastic_depth}
+        - _target_: tensorframes.nn.tensorformer.TensorFormer
+          tensor_reps:
+            _target_: tensorframes.reps.Irreps
+            irreps: ${model.net.net_main.layers.modules.0.tensor_reps.irreps}
+          num_heads: ${model.net.net_main.layers.modules.0.num_heads}
+          hidden_layers: ${model.net.net_main.layers.modules.0.hidden_layers}
+          hidden_value_dim: ${model.net.net_main.layers.modules.0.hidden_value_dim}
+          hidden_scalar_dim: ${model.net.net_main.layers.modules.0.hidden_scalar_dim}
+          hidden_activation: ${model.net.net_main.layers.modules.0.hidden_activation}
+          edge_embedding_dim: ${model.net.net_main.edge_embedding_module.out_dim}
+          attention_weight_dropout: ${model.net.net_main.layers.modules.0.attention_weight_dropout}
+          radial_cutoff: ${model.net.net_main.radial_module.cutoff}
+          stochastic_depth: ${model.net.net_main.layers.modules.0.stochastic_depth}
+        - _target_: torch_geometric.nn.LayerNorm
+          in_channels: ${get_irrep_dim:${model.net.net_main.layers.modules.0.tensor_reps.irreps}}
+    output_reps:
+      _target_: tensorframes.reps.Irreps
+      irreps: "94x0n + 32x0p + 32x1n + 8x1p + 16x2n + 4x2p"
+    global_out: false
+    pooling_method: "add"
+
+  # density embedding
+  density_embedding:
+    _target_: mldft.ml.models.components.tensorframes_components.density_embedding.DensityEmbedding
+    embedding_irreps: "i94x0n + 32x0p + 32x1n + 8x1p + 16x2n + 4x2p"
+    basis_info: ${data.basis_info}
+
+  # Atom Ref Module
+  atom_ref_module:
+    _target_: mldft.ml.models.components.atom_ref.AtomRef.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    mode: scalar_only
+
+  # Initial Guess Module
+  initial_guess_module:
+    _target_: mldft.ml.models.components.tensorframes_components.initial_guess_delta_module.InitialGuessDelta
+    embedding_irreps: ${model.net.net_main.output_reps}
+    basis_info: ${data.basis_info}
+    dataset_statistics: ${data.dataset_statistics}
+    weigher_key: "constant"
+
+  # Feature-wise rescaling module
+  dimension_wise_rescaling_module:
+    _target_: mldft.ml.models.components.dimension_wise_rescaling.DimensionWiseRescaling.from_dataset_statistics
+    dataset_statistics: ${data.dataset_statistics}
+    basis_info: ${data.basis_info}
+    weigher_key: "has_energy_label"
+    s_coeff: 50
+    s_grad: 0.05
+    epsilon: 1e-8
+    equivariant: True # this is important!
+
+  energy_mlp:
+    _target_: mldft.ml.models.components.tensorframes_components.energy_mlp_wrapped.EnergyMLPWrapped
+    in_reps: ${model.net.net_main.output_reps}
+    hidden_channels: [768, 1]
+    activation_layer: "SiLU"
+    # norm_layer: "layer_norm"
+    use_torchvision: false
+    # activation_layer:
+    #   _target_: hydra.utils.get_class
+    #   path: torch.nn.SiLU

@@ -1,0 +1,14 @@
+# For QM9 STRUCTURES25 model:
+_target_: mldft.ofdft.scheduler.AdaptiveSigmoidSchedulerWithDecay
+_partial_: true
+min_lr: ${density_optimizer.lr}
+max_lr: ${multiply:${density_optimizer.scheduler.min_lr}, 3}
+offset: 3.5
+slope: 1
+decay_rate: 0.995
+min_lr_decay: ${density_optimizer.scheduler.min_lr}
+# For QMugs STRUCTURES25 model:
+# min_lr: 0.0015  # will be set by the learning rate
+# max_lr: 0.0045
+# offset: 1
+# slope: 2

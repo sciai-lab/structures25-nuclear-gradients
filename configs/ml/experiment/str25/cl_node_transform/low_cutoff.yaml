@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - str25/cl_node_transform/default
+
+data:
+  cutoff: 4.5
+  n_min_cliques: 3
+  n_max_cliques: 3

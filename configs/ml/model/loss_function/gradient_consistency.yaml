@@ -1,0 +1,13 @@
+defaults:
+  - l1
+
+consistency_loss:
+  weight: 1
+  loss:
+    _target_: mldft.ml.models.components.gradient_consistency_loss.GradientConsistencyLoss
+    target_key: ${data.target_key}
+    basis_info: ${data.basis_info}
+    loss_function:
+      _target_: torch.nn.L1Loss
+      reduction: none
+    sample_weigher: null # use all samples for coefficient loss

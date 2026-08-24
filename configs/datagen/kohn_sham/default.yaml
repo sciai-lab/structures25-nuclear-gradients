@@ -1,0 +1,17 @@
+basis: "6-31G(2df,p)"
+xc: "PBE"
+initialization: "minao"
+grid_level: 3
+prune_method: "nwchem_prune"
+density_fit_basis: "def2-universal-jfit"
+density_fit_threshold: 30
+convergence_tolerance: 1e-9 # pyscf default, other possibility is 1meV 0.0000367493
+use_perturbation: True
+perturbation_cfg:
+  std_sampling: linear # options: linear, exponential
+  reduction_factor: 0.8 # used for exponential schedule
+  start_std: 0.1
+  end_std: 0.002
+  start_cycle: 4
+  end_cycle: 24
+  of_basis_set: ${of_basis_set}

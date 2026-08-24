@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  # Add the `run-tests` label on a PR to run tests for that PR once.
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+env:
+  DFT_DATA: ${{ github.workspace }}/data
+  DFT_MODELS: ${{ github.workspace }}/models
+
+jobs:
+  run_tests_ubuntu:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.label.name == 'run-tests')
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.12"]
+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.0"
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
+
+      - name: Sync project dependencies
+        run: uv sync --extra cpu --extra dev
+
+      - name: Run pytest
+        run: uv run pytest -m "not slow" -v

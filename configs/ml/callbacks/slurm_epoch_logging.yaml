@@ -1,0 +1,2 @@
+slurm_epoch_logging:
+  _target_: mldft.ml.callbacks.SlurmEpochLogging

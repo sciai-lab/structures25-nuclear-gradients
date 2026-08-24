@@ -1,0 +1,7 @@
+_target_: timm.optim.Lion
+_partial_: true
+lr: 2e-5
+betas: [0.95, 0.99]
+weight_decay: 1e-10
+# This repo suggest to use lr 3-10 smaller than AdamW
+# https://github.com/lucidrains/lion-pytorch/tree/main

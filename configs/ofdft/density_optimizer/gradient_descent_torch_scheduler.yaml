@@ -1,0 +1,3 @@
+defaults:
+  - gradient_descent_torch
+  - scheduler: adaptive_sigmoid

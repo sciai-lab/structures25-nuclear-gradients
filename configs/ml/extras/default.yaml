@@ -1,0 +1,19 @@
+# disable python warnings if they annoy you
+ignore_warnings: False
+
+# ask user for tags if none are provided in the config
+enforce_tags: True
+
+# pretty print config tree at the start of the run using Rich library
+print_config: True
+
+# pretty print the defaults tree (showing the actually used config files) at the start of the run using Rich library
+print_defaults_tree:
+  group_color: "cyan"
+  guide_style: "dim" # make the guide (the tree lines) dim to not distract from the content
+
+# add hostname to the config
+hostname: True
+
+# save code backup (source code + git info)
+save_code_backup: True

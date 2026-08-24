@@ -1,0 +1,10 @@
+initialization: "sad"
+guess_path: null # Can be set to use different run for the guess
+normalize_initial_guess: True
+ks_basis: "6-31G(2df,p)"
+xc_functional: "PBE"
+negative_integrated_density_penalty_weight: 0.0 # 1000.0
+convergence_criterion: "last_iter"
+grid_level: 3
+grid_prune: "nwchem_prune"
+max_xc_memory: 4000 # in MB

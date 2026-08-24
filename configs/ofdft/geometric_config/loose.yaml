@@ -1,0 +1,7 @@
+# Convergence settings are one magnitude bigger than the Gaussian default settings.
+
+convergence_energy: 1.0e-5 # Eh
+convergence_grms: 3.0e-3 # Eh/Bohr
+convergence_gmax: 4.5e-3 # Eh/Bohr
+convergence_drms: 1.2e-2 # Angstrom
+convergence_dmax: 1.8e-2 # Angstrom

@@ -1,0 +1,3 @@
+basis_info: ${data.basis_info}
+directed: True
+out_channels: 128

@@ -1,0 +1,12 @@
+defaults:
+  - default
+
+basis_info:
+  _target_: mldft.ml.data.components.basis_info.BasisInfo.from_dataset_info_yaml
+  path_to_data_info: ${oc.env:DFT_DATA}/${data.dataset_name}/dataset_info.yaml
+  atomic_numbers: [1, 6, 7, 8, 9] # H, C, N, O, F, for QM9
+
+dataset_name: "QM7X_QM9_QMUGSBin0_perturbed_fock"
+datamodule:
+  dataset_kwargs:
+    limit_scf_iterations: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, -1]

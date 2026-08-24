@@ -1,0 +1,18 @@
+defaults:
+  - equiformerv2
+
+net:
+  num_layers: 4
+  num_delta_layers: 0
+  sphere_channels: 16
+  attn_hidden_channels: 16 # [64, 96] This determines the hidden size of message passing. Do not necessarily use 96.
+  num_heads: 4
+  attn_alpha_channels: 16 # Not used when `use_s2_act_attn` is True.
+  attn_value_channels: 8
+  ffn_hidden_channels: 32
+  norm_type: "layer_norm_sh" # ['rms_norm_sh', 'layer_norm', 'layer_norm_sh']
+
+  num_sphere_samples: 64
+
+  edge_channels: 32
+  num_distance_basis: 64

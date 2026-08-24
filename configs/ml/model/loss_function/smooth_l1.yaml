@@ -1,0 +1,15 @@
+# smooth L1 loss for each component of the total loss
+
+defaults:
+  - l1
+
+energy_loss:
+  loss:
+    loss_function:
+      _target_: torch.nn.SmoothL1Loss
+      beta: 0.1 # quadratic in the interval [-beta, beta], linear outside
+gradient_loss:
+  loss:
+    loss_function:
+      _target_: torch.nn.SmoothL1Loss
+      beta: ${....energy_loss.loss.loss_function.beta} # use same beta as energy loss

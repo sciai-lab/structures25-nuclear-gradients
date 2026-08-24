@@ -1,0 +1,54 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - denop_settings: default
+  - density_optimizer: gradient_descent_torch_scheduler
+  - extras: default
+  - hydra: default
+  - subplot_list: subplots_fast
+  - eval: null
+
+# functional & init
+run_path: null # Needs to be set via command line
+ckpt_choice: "last" # 'last', 'best_energy', 'best_density', 'best_val_loss'
+
+# data
+split: val
+split_file_path: ${oc.env:DFT_DATA}/QM9_perturbed_fock/split_dimenet.pkl
+n_molecules: 1
+molecule_choice: "seeded_random" # 'random', 'seeded_random', 'first_n' or a list of indices.
+molecule_ids: []
+seed: 0
+
+# process settings
+device: cuda
+num_devices: 1
+num_threads: 8 # num_threads > batch_size means the batch will still be full if one thread is loading a molecule
+torch_threads_per_worker: 1 # Torch intra-op threads used inside each denop worker thread
+batch_size: 7 # set to 0 to not use batched inference
+batch_timeout: 0.05
+model_dtype: torch.float64
+deterministic: True
+
+# plot & save settings
+save_coeff_interval: 100
+plot_every_n: 10
+plot_summary: True
+swarm_plot_subsample: 1.0
+compute_grid_metrics: False # currently only L1 norm
+compare_to_ks: False # will also go on grid if True
+metrics_grid_level: 3
+metrics_grid_prune: "nwchem_prune"
+fail_fast: False
+compute_final_hessian: False
+
+continue_denop: False # if continue_denop, write to denop_dir
+denop_dir: null
+
+# hydra
+task_name: ofdft
+# if continue_denop, base_dir is denop_dir's parent directory, else construct as basename of run_dir
+base_dir: ${oc.env:DFT_MODELS}/${task_name}/${resolve_base_dir:${run_path}, ${denop_dir}, ${continue_denop}}
+log_file: ${hydra:runtime.output_dir}/${task_name}.log
+config_file: ${hydra:runtime.output_dir}/config.yaml

@@ -1,0 +1,59 @@
+ckpt_paths:
+  - "${oc.env:DFT_MODELS}/train/runs/example/checkpoints/last.ckpt"
+
+out_path: "${oc.env:DFT_MODELS}/analysis"
+name: example
+
+hydra:
+  run:
+    dir: ${out_path}/${name}
+
+plotter:
+  _target_: mldft.utils.model_analysis.plot_collection.PlotCollection
+  path: ${out_path}
+  generators:
+    - _target_: mldft.utils.model_analysis.plot_generator.Activations
+      model_paths: ${ckpt_paths}
+      num_samples: 4
+      random_samples: False
+      templates:
+        - _target_: mldft.utils.model_analysis.templates.activations.LayerDistribution
+          act_key: "*energy"
+          agg: "none"
+          style: "line"
+        - _target_: mldft.utils.model_analysis.templates.activations.LayerDistribution
+          act_key: "*energy"
+          agg: "sum"
+          style: "line"
+        - _target_: mldft.utils.model_analysis.templates.activations.LayerDistribution
+          act_key: "*energy"
+          agg: "none"
+          style: "box"
+        - _target_: mldft.utils.model_analysis.templates.activations.AttentionDist
+          act_key: ["*attention", "length"]
+          num_bins: 10
+          overlay: False
+    # - _target_: mldft.utils.model_analysis.plot_generator.Trajectories
+    #   model_paths: ${ckpt_paths}
+    #   templates:
+    #     - _target_: mldft.utils.model_analysis.templates.trajectories.TimeHistogram
+    #       act_key: "*energy_mlp"
+    #   ofdft_cfg_path: "density_optimization.yaml"
+    #   mol_idc: [0]
+    #   save_every: 5
+    - _target_: mldft.utils.model_analysis.plot_generator.Parameters
+      model_paths: ${ckpt_paths}
+      templates:
+        - _target_: mldft.utils.model_analysis.templates.parameters.Histogram
+          param_key: "*energy"
+          num_bins: 50
+        - _target_: mldft.utils.model_analysis.templates.parameters.SortedWeights
+          param_key: "*energy**0.weight"
+        - _target_: mldft.utils.model_analysis.templates.parameters.NonZeroWeights
+          param_key: "*energy**0.weight"
+        - _target_: mldft.utils.model_analysis.templates.parameters.SortedWeights
+          param_key: "*energy**3.weight"
+        - _target_: mldft.utils.model_analysis.templates.parameters.NonZeroWeights
+          param_key: "*energy**3.weight"
+  name: ${name}
+  clear_files: True

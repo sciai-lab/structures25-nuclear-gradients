@@ -1,0 +1,6 @@
+_target_: timm.optim.AdamWLegacy
+_partial_: true
+lr: 1e-3
+betas: [0.95, 0.99]
+weight_decay: 1e-10
+caution: True

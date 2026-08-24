@@ -1,0 +1,7 @@
+defaults:
+  - graphformer
+
+net:
+  gnn_module:
+    g3d_class:
+      _target_: mldft.ml.models.components.g3d_layer.G3DLayerFullyConnected

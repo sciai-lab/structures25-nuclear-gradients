@@ -1,0 +1,177 @@
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[project]
+name = "mldft"
+version = "0.0.2"
+description = "Analytic nuclear gradients for machine-learned orbital-free density functional theory"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+authors = [
+    {name = "Scientific AI (Hamprecht Lab, Heidelberg University)"},
+]
+urls = {homepage = "https://github.com/sciai-lab/structures25-nuclear-gradients", "Hugging Face" = "https://huggingface.co/sciai-lab/structures25-nuclear-gradients"}
+
+dependencies = [
+    "scikit-learn",
+    "geometric",
+    "zarr==2.18.4",
+    "numcodecs==0.15",
+    "pyscf==2.4",
+    "numpy",
+    "rdkit",
+    "polars",
+    "rich",
+    "h5py",
+    "tensorboard",
+    "hydra-core",
+    "hydra-optuna-sweeper",
+    "hydra-colorlog",
+    "hydra-submitit-launcher",
+    "rootutils",
+    "loguru",
+    "opt-einsum",
+    "tqdm",
+    "basis-set-exchange",
+    "lmdb",
+    "huggingface-hub>=0.35.3",
+    "irmsd",
+    "threadpoolctl",
+    # Visualization
+    "ase",
+    "pyvista[all]",
+    "pypdf",
+    "seaborn",
+    "fairchem-core>=2.11.0",
+    "hdf5plugin>=6.0.0",
+    "safetensors>=0.6.2",
+]
+
+[project.optional-dependencies]
+cpu = [
+    "torch==2.8.0",
+    "torchvision",
+    "torchaudio",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2+pt28cpu-cp311-cp311-linux_x86_64.whl ; python_version=='3.11' and sys_platform=='linux'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2+pt28cpu-cp312-cp312-linux_x86_64.whl ; python_version=='3.12' and sys_platform=='linux'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2+pt28cpu-cp313-cp313-linux_x86_64.whl ; python_version=='3.13' and sys_platform=='linux'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2-cp311-cp311-macosx_10_9_universal2.whl ; python_version=='3.11' and sys_platform=='darwin'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2-cp312-cp312-macosx_10_13_universal2.whl ; python_version=='3.12' and sys_platform=='darwin'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_scatter-2.1.2-cp313-cp313-macosx_10_13_universal2.whl ; python_version=='3.13' and sys_platform=='darwin'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18+pt28cpu-cp311-cp311-linux_x86_64.whl ; python_version=='3.11' and sys_platform=='linux'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18+pt28cpu-cp312-cp312-linux_x86_64.whl ; python_version=='3.12' and sys_platform=='linux'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18+pt28cpu-cp313-cp313-linux_x86_64.whl ; python_version=='3.13' and sys_platform=='linux'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18-cp311-cp311-macosx_11_0_universal2.whl ; python_version=='3.11' and sys_platform=='darwin'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18-cp312-cp312-macosx_11_0_universal2.whl ; python_version=='3.12' and sys_platform=='darwin'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_sparse-0.6.18-cp313-cp313-macosx_11_0_universal2.whl ; python_version=='3.13' and sys_platform=='darwin'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3+pt28cpu-cp311-cp311-linux_x86_64.whl ; python_version=='3.11' and sys_platform=='linux'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3+pt28cpu-cp312-cp312-linux_x86_64.whl ; python_version=='3.12' and sys_platform=='linux'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3+pt28cpu-cp313-cp313-linux_x86_64.whl ; python_version=='3.13' and sys_platform=='linux'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3-cp311-cp311-macosx_10_9_universal2.whl ; python_version=='3.11' and sys_platform=='darwin'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3-cp312-cp312-macosx_10_13_universal2.whl ; python_version=='3.12' and sys_platform=='darwin'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cpu/torch_cluster-1.6.3-cp313-cp313-macosx_10_13_universal2.whl ; python_version=='3.13' and sys_platform=='darwin'",
+    "lightning==2.5.5",
+    "torch-geometric",
+    "e3nn",
+    "torchmetrics",
+    "timm",
+    "tensorframes @ git+https://github.com/sciai-lab/tensor_frames.git@cd1addfd3c82a47095c9961ab999dcabfab4c21d",
+]
+cuda = [
+    "torch==2.8.0",
+    "torchvision",
+    "torchaudio",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_scatter-2.1.2+pt28cu126-cp311-cp311-linux_x86_64.whl ; python_version=='3.11'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_scatter-2.1.2+pt28cu126-cp312-cp312-linux_x86_64.whl ; python_version=='3.12'",
+    "torch-scatter @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_scatter-2.1.2+pt28cu126-cp313-cp313-linux_x86_64.whl ; python_version=='3.13'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_sparse-0.6.18+pt28cu126-cp311-cp311-linux_x86_64.whl ; python_version=='3.11'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_sparse-0.6.18+pt28cu126-cp312-cp312-linux_x86_64.whl ; python_version=='3.12'",
+    "torch-sparse @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_sparse-0.6.18+pt28cu126-cp313-cp313-linux_x86_64.whl ; python_version=='3.13'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_cluster-1.6.3+pt28cu126-cp311-cp311-linux_x86_64.whl ; python_version=='3.11'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_cluster-1.6.3+pt28cu126-cp312-cp312-linux_x86_64.whl ; python_version=='3.12'",
+    "torch-cluster @ https://data.pyg.org/whl/torch-2.8.0+cu126/torch_cluster-1.6.3+pt28cu126-cp313-cp313-linux_x86_64.whl ; python_version=='3.13'",
+    "lightning==2.5.5",
+    "torch-geometric",
+    "e3nn",
+    "torchmetrics",
+    "timm",
+    "tensorframes @ git+https://github.com/sciai-lab/tensor_frames.git@cd1addfd3c82a47095c9961ab999dcabfab4c21d",
+]
+dev = [
+    "pre-commit",
+    "pytest==7.4.4", # bumping pytest to 8.4.2 introduced issues, where fixtures that are working in 7.4.4 could no longer be found
+    "pytest-cov",
+    "gpustat",
+    "notebook",
+    "gitpython", # in maintenance mode, might want to remove
+    "ipykernel==7.2.0",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+
+[project.scripts]
+mldft_ks = "mldft.datagen.kohn_sham_dataset:main"
+mldft_labelgen = "mldft.datagen.generate_labels_dataset:main"
+mldft_train = "mldft.launchers:train"
+mldft_denop = "mldft.launchers:run_density_optimization"
+mldft_geomopt = "mldft.launchers:run_geometry_optimization"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--color=yes",
+  "--durations=0",
+  "--strict-markers",
+  "--doctest-modules",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::UserWarning",
+]
+log_cli = true
+markers = [
+  "slow: slow tests",
+]
+minversion = "6.0"
+testpaths = "tests/"
+
+[tool.isort]
+known_first_party = ["mldft", "tensorframes"]
+profile = "black"
+
+[tool.black]
+line-length = 99
+
+[tool.uv]
+conflicts = [
+  [ { extra = "cpu" }, { extra = "cuda" } ],
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", extra = "cpu" },
+  { index = "pytorch-cuda", extra = "cuda" }
+]
+torchvision = [
+  { index = "pytorch-cpu", extra = "cpu" },
+  { index = "pytorch-cuda", extra = "cuda" }
+]
+torchaudio = [
+  { index = "pytorch-cpu", extra = "cpu" },
+  { index = "pytorch-cuda", extra = "cuda" }
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.build-backend]
+module-root = ""

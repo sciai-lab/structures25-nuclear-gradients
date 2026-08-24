@@ -1,0 +1,26 @@
+# @package _global_
+
+defaults:
+  - override /data: md17
+  - override /model: graphformer
+  - override /trainer: default
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["md17", "apbe", "mofdft_model"]
+
+data:
+  target_key: "kin_minus_apbe"
+
+trainer:
+  max_epochs: 600
+
+model:
+  loss_function:
+    energy_loss:
+      weight: 1.0
+    gradient_loss:
+      weight: 0.1
+    coefficient_loss:
+      weight: 0.08

@@ -1,0 +1,8 @@
+defaults:
+  - default
+
+enabled: true
+
+# Keep source on globally visible storage, copy only required files to node-local SSD.
+src_dft_data: ${oc.env:DFT_DATA}
+dst_dft_data: $TMPDIR/mldft_data

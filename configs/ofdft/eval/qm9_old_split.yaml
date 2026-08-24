@@ -1,0 +1,8 @@
+# @package _global_
+
+split_file_path: ${oc.env:DFT_DATA}/QM9_perturbed_fock_fixed/split.pkl
+split: "test"
+n_molecules: 13389
+
+density_optimizer:
+  max_cycle: 5000

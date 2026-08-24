@@ -1,0 +1,8 @@
+# Gaussian radial embedding
+defaults:
+  - default
+
+_target_: mldft.ml.models.components.radial_embedding.GaussianEmbedding
+init_radius_range: [0, 3]
+std_init_radius_range: [0.1, 3]
+normalized: True

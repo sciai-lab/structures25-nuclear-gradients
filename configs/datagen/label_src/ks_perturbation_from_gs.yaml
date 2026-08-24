@@ -1,0 +1,24 @@
+calculation_fct: calculate_labels_with_ground_state_perturbations
+
+perturbation_cfg:
+  num_perturbations: 21
+  radius_sampling_mode: inverse_transform
+
+  # 🎈 Linear schedule uniform PDF
+  l2norm_pdf:
+    _target_: mldft.datagen.methods.perturbation.pdf.LinearScheduleUniformPdf
+    pert_max: 3.5
+    pert_min: 0.0
+
+  # 🎈 Cosine annealing PDF (half cosine period on [pert_min, pert_max]).
+  # l2norm_pdf:
+  #   _target_: mldft.datagen.methods.perturbation.pdf.CosineAnnealingPdf
+  #   pert_max: 3.5
+  #   pert_min: 0.0
+  #   anneal_power: 1.5
+
+  # 🎈 Linear PDF
+  # l2norm_pdf:
+  #   _target_: mldft.datagen.methods.perturbation.pdf.LinearPdf
+  #   pert_max: 3.5
+  #   pert_min: 0.0

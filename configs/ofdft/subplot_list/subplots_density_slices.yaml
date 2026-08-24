@@ -1,0 +1,70 @@
+# Includes only plots that can be evaluated fast and plots of slices of the density
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_all_energy_differences
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_density_and_gradient
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_coefficient_differences_lines
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_dipole_moment
+  _partial_: True
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_3d_atom_positions
+  _partial_: True
+  zoom: 0.4
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_plot_density_slices
+  _partial_: True
+  n_pixel: 200
+  dpi: 100
+  zoom: .75
+  mode: "log density"
+  labelmode: 0
+  rotate_molecule_mode: pca
+  initial_guess_index: 0
+  annotate_atoms: 2
+  title_left_plot: "Log density at stopping index"
+  title_right_plot: "Log density from label"
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_plot_density_slices
+  _partial_: True
+  n_pixel: 200
+  dpi: 100
+  zoom: .75
+  mode: "ks-of"
+  labelmode: 0
+  rotate_molecule_mode: pca
+  initial_guess_index: 0
+  annotate_atoms: 1
+  title_left_plot: "Density at stopping index"
+  title_right_plot: "Difference density predicted - label"
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_plot_density_slices
+  _partial_: True
+  n_pixel: 200
+  dpi: 100
+  zoom: .2
+  mode: "ks-of"
+  labelmode: 0
+  rotate_molecule_mode: pca
+  initial_guess_index: 0
+  annotate_atoms: 1
+  title_left_plot: "Density at stopping index zoomed in"
+  title_right_plot: "Difference density predicted - label zoomed in"
+
+- _target_: mldft.utils.plotting.plot_density_optimization._add_plot_density_slices
+  _partial_: True
+  n_pixel: 200
+  dpi: 100
+  zoom: .75
+  mode: density
+  rotate_molecule_mode: pca
+  initial_guess_index: 2
+  annotate_atoms: 1
+  calculate_max_range: False
+  c_range: 0.2
+  title_left_plot: "Density at stopping index, subtracted atomguess"
+  title_right_plot: "Density from label, subtracted atomguess"

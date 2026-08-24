@@ -1,0 +1,28 @@
+data_set_type: QM9 # Type of the dataset, e.g., QM9, MD17, etc.
+postfix: "$" # regex to match all datasets in the root directory for which a statistic should be generated
+root_directory: ${oc.env:DFT_DATA}
+num_processes: 100
+names_of_metrics: # The names of the metrics to be computed
+  - AE_total_energy
+  - AE_hartree_energy
+  - AE_xc_energy
+  - AE_ext_energy
+  - AE_kin_energy
+  - AE_hartree_ext_energy
+  - AE_density
+  - L2_residual_densities
+  - L1_residual_densities
+  - L1_negative_densities
+  - L2_residual_hartree
+  - L2_residual_hartree_ext
+  - max_abs_gradient
+  - L2_gradient
+  - L2_gradient_overlap
+  - N_basis_functions
+override: false # If True, the existing statistics will be overridden
+save_folder_name: statistic # Folder name where the statistics will be saved
+n_molecules: null # None if all molecules should be processed, or a number of molecules to be processed
+search_pattern: "^labels$" # Regex to match the labels folder in the dataset
+kohn_sham_folder: "kohn_sham" # Folder name where the Kohn-Sham data is stored
+iterations: 1000 # None if all iterations should be used, list of iterations to be used otherwise or large number if just the last iteration should be used
+start_index: 0 # Index of the first molecule to be processed
