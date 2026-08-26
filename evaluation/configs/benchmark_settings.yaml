@@ -1,0 +1,68 @@
+models:
+  Graphormer:
+    model_id: 519
+    directory: Graphormer
+    checkpoint: Graphormer.safetensors
+    hard_projection: false
+  Graphormer NGL:
+    model_id: 565
+    directory: Graphormer-NGL
+    checkpoint: Graphormer-NGL.safetensors
+    hard_projection: false
+  eSEN:
+    model_id: 479
+    directory: eSEN
+    checkpoint: eSEN.safetensors
+    hard_projection: true
+    eigenvalue_threshold: 0.001
+  eSEN NGL:
+    model_id: 597
+    directory: eSEN-NGL
+    checkpoint: eSEN-NGL.safetensors
+    hard_projection: true
+    eigenvalue_threshold: 0.001
+
+forces:
+  datasets:
+    QM9: QM9_perturbed_fock/split.pkl
+    QM7X: QM7X_perturbed_fock/split.pkl
+    QMUGSX: QMUGSBin0X_perturbed_fock/split.pkl
+  split: test
+  n_molecules: 250
+  molecule_choice: seeded_random
+  seed: 0
+  model_dtype: torch.float64
+  reference_total_key: nuc_grad_tot
+  reference_model_key: auto
+
+numerical_gradients:
+  model: eSEN NGL
+  dataset: QM9_perturbed_fock/split.pkl
+  split: val
+  n_molecules: 25
+  molecule_choice: seeded_random
+  seed: 0
+  epsilon_bohr: 0.001
+  density_convergence_tolerances: [0.001, 0.0001, 0.000001]
+  methods: [analytic, numerical, fully_numerical]
+
+geometry_optimization:
+  datasets: [QM7X, QM7X_tight, QMUGS, DipeptideIsomers]
+  gradients: analytic
+  initial_guess_from_last: simple
+  loose:
+    maxsteps: 50
+    density_convergence_tolerance: 0.0001
+    geometric_config: configs/ofdft/geometric_config/loose.yaml
+  tight:
+    maxsteps: 300
+    density_convergence_tolerance: 0.000001
+    geometric_config: configs/ofdft/geometric_config/gaussian_very_tight.yaml
+
+density_optimization:
+  dataset: QMUGSLargeBins
+  minimum_heavy_atoms: 21
+  density_convergence_tolerance: 0.0001
+  initialization: sad
+  functional: PBE
+  basis: 6-31G(2df,p)

@@ -112,6 +112,8 @@ DATASET_KWARGS_TO_DROP = (
     "label_path",
     "kohn_sham_path",
     "ground_state_coeffs",
+    "load_ground_state_gradients",
+    "restricted",
 )
 
 

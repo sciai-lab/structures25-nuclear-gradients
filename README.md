@@ -65,6 +65,9 @@ mldft_geomopt
 The workflows are configured with [Hydra](https://hydra.cc/) through the configuration files in
 [`configs`](configs).
 
+Benchmark inputs, numerical results, and reproduction commands are provided in
+[`evaluation`](evaluation).
+
 ## Documentation
 
 Install the `docs` extra and build the documentation locally:
