@@ -1,8 +1,7 @@
 # Reproducing the evaluations
 
 This directory contains the compact inputs, settings, and numerical results needed to reproduce
-the central evaluations. It intentionally excludes generated figures, raw logs, PySCF checkpoint
-files, and full optimization trajectories.
+the central evaluations.
 
 ## Contents
 
